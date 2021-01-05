@@ -17,7 +17,20 @@ class HttpService {
         URLSession.shared.dataTask(with: url) { (data, res, err) in
             if let data = data{
                 print(data)
-               
+               do{
+                    let jsonResponse = try JSONSerialization.jsonObject(with:
+                                          data, options: [])
+                    print(jsonResponse)
+                
+                
+                    let modeldata:Movies = try! JSONDecoder().decode(Movies.self, from: data)
+                    print(modeldata)
+                    completionHandler(modeldata,err);
+
+                } catch let parsingError {
+                    print("Error", parsingError)
+                    completionHandler(nil,nil);
+                }
             }
             if let res = res{
                 print(res)
