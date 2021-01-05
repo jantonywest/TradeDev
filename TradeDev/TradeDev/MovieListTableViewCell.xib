@@ -33,11 +33,11 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bZu-nW-UNt">
-                        <rect key="frame" x="0.0" y="79" width="353" height="2"/>
+                        <rect key="frame" x="0.0" y="80.5" width="353" height="0.5"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="2" id="bsk-Bq-W0f"/>
-                            <constraint firstAttribute="height" constant="2" id="iU3-MF-HxN"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="0.59999999999999998" id="bsk-Bq-W0f"/>
+                            <constraint firstAttribute="height" constant="0.59999999999999998" id="iU3-MF-HxN"/>
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aAD-Lt-d4W">

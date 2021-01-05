@@ -25,5 +25,19 @@ class MovieManager: NSObject {
         }
         return ""
     }
+    func getImgUrl(atIndex:Int) -> URL?{
+        if let strUrl = self.movies?[atIndex].thumbnail{
+            if let Url = URL(string: strUrl) {
+               return Url
+            }
+        }
+        return nil
+    }
+    func getMovieYear(atIndex:Int) -> String{
+        if let year = self.movies?[atIndex].year{
+            return "\(year)"
+        }
+        return ""
+    }
 
 }

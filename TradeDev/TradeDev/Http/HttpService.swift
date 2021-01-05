@@ -10,7 +10,7 @@ import Foundation
 class HttpService {
     
     let baseUrl = "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master"
-
+    static let imageCache = NSCache<AnyObject, AnyObject>()
     func connectMoviesList(_ completionHandler: @escaping(_ data:Movies?,  _ error:Error?) -> Void) ->Void{
         let listUrl = baseUrl + "/list.json"
         guard let url = URL(string: listUrl) else {return}
@@ -42,6 +42,30 @@ class HttpService {
         }.resume()
 
     }
-
+    fileprivate func baseUrlRequestApi(url: URL,
+                                _ completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    static func getCacheImage(_ strUrl:String) -> Data?{
+        return HttpService.imageCache.object(forKey: strUrl as AnyObject) as? Data
+    }
+    func setCacheImage(_ data:Data?, strUrl:String){
+        HttpService.imageCache.setObject(data as AnyObject, forKey: strUrl as AnyObject)
+    }
+    func getImage(url:URL,_ completionHandler: @escaping(_ data:Data?) -> Void) ->Void{
+        if let imageFromCache = HttpService.getCacheImage(url.absoluteString){
+            completionHandler(imageFromCache)
+            return
+        }
+        self.baseUrlRequestApi(url: url) { (data, response, error) in
+            if let data = data{
+                self.setCacheImage(data, strUrl: url.absoluteString)
+                completionHandler(data)
+            }else{
+                self.setCacheImage(Data(), strUrl: url.absoluteString)
+            }
+            completionHandler(nil)
+        }
+    }
    
 }
