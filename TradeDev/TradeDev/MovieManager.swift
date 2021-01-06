@@ -39,5 +39,8 @@ class MovieManager: NSObject {
         }
         return ""
     }
+    func getMovie(atIndex:Int) -> Movie?{
+        return self.movies?[atIndex]
+    }
 
 }

@@ -11,8 +11,8 @@ class HttpService {
     
     let baseUrl = "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master"
     static let imageCache = NSCache<AnyObject, AnyObject>()
-    func connectMoviesList(_ completionHandler: @escaping(_ data:Movies?,  _ error:Error?) -> Void) ->Void{
-        let listUrl = baseUrl + "/list.json"
+    func connectMoviesList(_ defaultUrl:String = "/list.json", _ completionHandler: @escaping(_ data:Movies?,  _ error:Error?) -> Void) ->Void{
+        let listUrl = baseUrl + defaultUrl
         guard let url = URL(string: listUrl) else {return}
         URLSession.shared.dataTask(with: url) { (data, res, err) in
             if let data = data{
@@ -42,6 +42,38 @@ class HttpService {
         }.resume()
 
     }
+    func connectMovieDetails(_ id:Int,_ completionHandler: @escaping(_ data:MovieDetails?,  _ error:Error?) -> Void) ->Void{
+        let detailUrl = baseUrl + "/details/\(id).json"
+        guard let url = URL(string: detailUrl) else {return}
+        URLSession.shared.dataTask(with: url) { (data, res, err) in
+            if let data = data{
+                print(data)
+                do{
+                    let jsonResponse = try JSONSerialization.jsonObject(with:
+                                                             data, options: [])
+
+                    print(jsonResponse)
+                 
+                   let modeldata:MovieDetails = try! JSONDecoder().decode(MovieDetails.self, from: data)
+                    print(modeldata)
+                    completionHandler(modeldata,err);
+                
+                  } catch let parsingError {
+                     print("Error", parsingError)
+                    completionHandler(nil,nil);
+                }
+            }
+            if let res = res{
+                print(res)
+            }
+            if let err = err{
+                print(err)
+            }
+            completionHandler(nil,err);
+        }.resume()
+
+    }
+    
     fileprivate func baseUrlRequestApi(url: URL,
                                 _ completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()

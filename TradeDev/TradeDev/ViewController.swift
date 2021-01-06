@@ -47,21 +47,34 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
      
          return 80
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let detailView = self.storyboard?.instantiateViewController(withIdentifier: "movieDetail") as? MovieDetailViewController {
+            detailView.movie = self.movieManager.getMovie(atIndex: indexPath.row)
+            self.navigationController?.pushViewController(detailView, animated: true)
+        }
+    }
+    
      func register(){
          self.tableView.register(UINib(nibName: "MovieListTableViewCell", bundle: nil), forCellReuseIdentifier: "movieList");
      }
 
 }
 extension UIImageView {
-    func getImage(url: URL?) {
+    func getImage(url: URL? , isThumbNail:Bool = true) {
         if let url = url{
             DispatchQueue.global().async { [weak self] in
                 HttpService().getImage(url: url) { (data) in
                     if let data = data{
                         if let image = UIImage(data: data) {
                             DispatchQueue.main.async {
-                                self?.image = image
-                                self?.contentMode = UIView.ContentMode.left
+                                if isThumbNail {
+                                    self?.image = image
+                                    self?.contentMode = .scaleToFill
+                                }else{
+                                    self?.image = image.scaleImageToSize(newSize: CGSize(width: (self?.frame.size.width)!,  height: 500))
+                                    self?.contentMode = .scaleAspectFit
+                                }
+                                self?.clipsToBounds = true
                                 self?.layoutSubviews()
                                 self?.layoutIfNeeded()
                                  
